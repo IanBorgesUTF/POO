@@ -3,6 +3,7 @@ namespace ConsoleApp.Modelos;
 public class Compromisso
 {
     private DateTime _data;
+    private TimeSpan _hora; 
     public String Data
     {
         get { return _data.ToString(); }
@@ -12,7 +13,15 @@ public class Compromisso
             _validarDataValidaParaCompromisso();
         }
     }
-    public TimeSpan Hora { get; set; }
+    public string Hora
+        {
+            get { return _hora.ToString(@"hh\:mm"); }
+            set
+            {
+                _validarHoraInformada(value);
+                _validarHoraValidaParaCompromisso();
+            }
+        }
     public string Descricao { get; set; }
     public string Local { get; set; }
 
@@ -26,6 +35,30 @@ public class Compromisso
             throw new Exception($"Data {data} Inválida!");
         }
     }
+    private void _validarHoraInformada(string hora)
+        {
+            if (!TimeSpan.TryParseExact(
+                    hora,
+                    @"hh\:mm",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out _hora))
+            {
+                throw new Exception($"Hora '{hora}' inválida!");
+            }
+        }
+
+     private void _validarHoraValidaParaCompromisso()
+        {
+            var horaMin = new TimeSpan(13, 0, 0);
+            var horaMax = new TimeSpan(17, 30, 0);
+
+            if (_hora < horaMin || _hora > horaMax)
+            {
+                throw new Exception(
+                    $"Hora {_hora:hh\\:mm} inválida. " +
+                    $"O compromisso deve ser entre {horaMin:hh\\:mm} e {horaMax:hh\\:mm}.");
+            }
+        }
 
     private void _validarDataValidaParaCompromisso() {
         if (_data<=DateTime.Now) {
