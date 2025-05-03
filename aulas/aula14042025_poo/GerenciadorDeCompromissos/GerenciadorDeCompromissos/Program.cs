@@ -16,9 +16,9 @@
             Console.WriteLine("Cadastro da reserva\n");
             Console.Write("Data da reserva (dd/MM/yyyy): ");
             var data = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
-            Console.Write("Hora da reserva (HH:mm): ");
+            Console.Write("Hora da reserva (hh:mm): ");
             var hora = TimeSpan.Parse(Console.ReadLine());
-            Console.Write("Descrição da sala: ");
+            Console.Write("Descrição da sala(código da sala): ");
             var descricao = Console.ReadLine();
             Console.Write("Capacidade: ");
             var capacidade = int.Parse(Console.ReadLine());
