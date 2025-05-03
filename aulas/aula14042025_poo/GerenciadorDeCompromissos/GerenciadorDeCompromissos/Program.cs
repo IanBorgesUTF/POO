@@ -1,65 +1,49 @@
 ﻿using ConsoleApp.Modelos;
+ 
+ 
+ Console.WriteLine("Configuração das reservas de salas\n");
+            Console.Write("Data mínima (dd/MM/yyyy): ");
+            var dataMin = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+            Console.Write("Data máxima (dd/MM/yyyy): ");
+            var dataMax = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+            Console.Write("Hora mínima (HH:mm): ");
+            var horaMin = TimeSpan.Parse(Console.ReadLine());
+            Console.Write("Hora máxima (HH:mm): ");
+            var horaMax = TimeSpan.Parse(Console.ReadLine());
 
-Compromisso compromisso = new();
+            ConfiguracaoReserva config = new(dataMin, dataMax, horaMin, horaMax);
 
-Console.WriteLine("Vamos registrar um compromisso");
+            Console.WriteLine("Cadastro da reserva\n");
+            Console.Write("Data da reserva (dd/MM/yyyy): ");
+            var data = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+            Console.Write("Hora da reserva (hh:mm): ");
+            var hora = TimeSpan.Parse(Console.ReadLine());
+            Console.Write("Descrição da sala(código da sala): ");
+            var descricao = Console.ReadLine();
+            Console.Write("Capacidade: ");
+            var capacidade = int.Parse(Console.ReadLine());
 
-Console.Write("Digite a data do compromisso (dd/MM/aaaa): ");
-// var dataDigitada = Console.ReadLine();
+            Reserva reserva = new(config);
+            reserva.RegistrarData(data);
+            reserva.RegistrarHora(hora);
+            reserva.RegistrarDescricao(descricao);
+            reserva.RegistrarCapacidade(capacidade);
+            reserva.ValidarReserva();
 
-while (true) {
-    try {
-        compromisso.Data = Console.ReadLine();
-        break;
-    } catch (Exception e) {
-        Console.Write($"Erro: {e.Message}\nDigite uma nova data: ");
-    }
-}
-Console.Write("Digite a hora do compromisso (HH:mm): ");
-//var horaDigitada = Console.ReadLine();
+            if (reserva.Erros.Count == 0)
+            {
+                Console.WriteLine("Reserva feita corretamente: ");
+                Console.WriteLine(reserva);
+            }
+            else
+            {
+                Console.WriteLine("Erro na reserva: ");
+                foreach (var erro in reserva.Erros)
+                {
+                    Console.WriteLine($"- {erro}");
+                }
+            }
 
-while (true) {
-    try {
-        compromisso.Hora = Console.ReadLine();
-        break;
-    } catch (Exception e) {
-        Console.Write($"Erro: {e.Message}\nDigite uma nova hora: ");
-    }
-}
-
-// TimeSpan horaCompromisso;
-
-// while(!TimeSpan.TryParse(horaDigitada, out horaCompromisso)) {
-//     Console.WriteLine("HORA INVÁLIDA. \nDigite a hora do compromisso (HH:mm): ");
-//     horaDigitada = Console.ReadLine();
-// }
-
-// Console.Write("Digite a DESCRIÇÃO para o compromisso: ");
-// var descricao = Console.ReadLine();
-
-// Console.Write("Digite o LOCAL para o compromisso: ");
-// var local = Console.ReadLine();
-
-// DateTime dataEHoraParaCompromisso = dataCompromisso.Add(horaCompromisso); 
-
-// Console.WriteLine("Data: " + dataCompromisso.Date.ToShortDateString());
-// Console.WriteLine($"Hora: {horaCompromisso}");
-// Console.WriteLine($"Descrição: {descricao}");
-// Console.WriteLine($"Local: {local}");
-
-// Console.WriteLine($"Data e Hora: {dataEHoraParaCompromisso}");
-
-
-// // Compromisso compromisso = new Compromisso();
-// // var compromisso = new Compromisso();
-
-
-
-// // Compromisso compromisso = new();
-// // compromisso.Data = DateTime.Now.Date;
-// // Console.WriteLine(compromisso.Data);
-// // Console.WriteLine(compromisso.DataBR());
-
-// // compromisso.RegistrarData(DateTime.Now.Date);
-
-// // Console.Write(compromisso.ObterData());
+            Console.WriteLine("Pressione qualquer tecla para sair");
+            Console.ReadKey();
+      
