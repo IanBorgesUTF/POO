@@ -1,100 +1,40 @@
 namespace ConsoleApp.Modelos;
 
-public class Compromisso
-{
-    private DateTime _data;
-    private TimeSpan _hora; 
-    public String Data
-    {
-        get { return _data.ToString(); }
-        set
-        {
-            _validarDataInformada(value);
-            _validarDataValidaParaCompromisso();
-        }
-    }
-    public string Hora
-        {
-            get { return _hora.ToString(@"hh\:mm"); }
-            set
-            {
-                _validarHoraInformada(value);
-                _validarHoraValidaParaCompromisso();
-            }
-        }
+public class Compromisso{
+    public DateTime DataHora { get; set; }
     public string Descricao { get; set; }
-    public string Local { get; set; }
+    public Usuario Usuario { get; set; }
+    public Local Local { get; set; }
 
-    private void _validarDataInformada(string data) {
-        if (!DateTime.TryParseExact(data,
-                       "dd/MM/yyyy",
-                       System.Globalization.CultureInfo.GetCultureInfo("pt-BR"),
-                       System.Globalization.DateTimeStyles.None,
-                       out _data))
-        {
-            throw new Exception($"Data {data} Inválida!");
+    public List<Participante> Participantes { get; set; } = new();
+    public List<Anotacao> Anotacoes { get; set; } = new();
+
+    public Compromisso(DateTime dataHora, string descricao, Usuario usuario, Local local){
+        
+        if (dataHora <= DateTime.Now) throw new ArgumentException("Data/hora deve estar no futuro.");
+        
+        if (string.IsNullOrWhiteSpace(descricao)) throw new ArgumentException("Descrição obrigatória.");
+        
+        DataHora = dataHora;
+        Descricao = descricao;
+        Usuario = usuario;
+        Local = local;
+    }
+    public void AdicionarParticipante(Participante p){
+                
+        if (!Participantes.Contains(p)){
+            Participantes.Add(p);
+            p.AdicionarCompromisso(this);
         }
     }
-    private void _validarHoraInformada(string hora)
-        {
-            if (!TimeSpan.TryParseExact(
-                    hora,
-                    @"hh\:mm",
-                    System.Globalization.CultureInfo.InvariantCulture,
-                    out _hora))
-            {
-                throw new Exception($"Hora '{hora}' inválida!");
-            }
-        }
 
-     private void _validarHoraValidaParaCompromisso()
-        {
-            var horaMin = new TimeSpan(13, 0, 0);
-            var horaMax = new TimeSpan(17, 30, 0);
-
-            if (_hora < horaMin || _hora > horaMax)
-            {
-                throw new Exception(
-                    $"Hora {_hora:hh\\:mm} inválida. " +
-                    $"O compromisso deve ser entre {horaMin:hh\\:mm} e {horaMax:hh\\:mm}.");
-            }
-        }
-
-    private void _validarDataValidaParaCompromisso() {
-        if (_data<=DateTime.Now) {
-            throw new Exception($"Data {_data.ToString("dd/MM/yyyy")} é inferior a permitida.");
-        }
-        // if (_data == null) {
-        //     throw new Exception("Data ainda não informada");
-        // }
+    public void AdicionarAnotacao(string texto){
+        
+        Anotacoes.Add(new Anotacao(texto));
     }
-    // private TimeSpan _hora;
-    // public TimeSpan Hora
-    // {
-    //     get { return _hora; }
-    //     set { _hora = value; }
-    // }
 
-    // private DateTime _data;
-
-    // public DateTime Data {
-    //     get {
-    //         return _data;
-    //     }
-    //     set {
-    //         _data = value;
-    //     }
-    // }
-
-    // public string DataBR() {
-    //     return _data.ToString("dd/MM/yyyy");
-    // }
-
-    // public void RegistrarData(DateTime data) {
-    //     _data = data;
-    // }
-
-    // public DateTime ObterData() {
-    //     return _data;
-    // }
+    public override string ToString(){
+        
+        return $"[{DataHora:dd/MM/yyyy HH:mm}] {Descricao} @ {Local?.Nome} com {Participantes.Count} participantes";
+    }
 }

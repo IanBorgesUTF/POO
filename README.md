@@ -1,3 +1,11 @@
+
+--------------------------------Nomes dos integrantes do grupo-----------------------------------------
+
+Bruno Rocco Wolfardt;
+Felipe Sousa da Costa;
+Ian Fernandes Borges.
+
+-------------------------------------------------------------------------------------------------------
 Reserva de Salas
 
 Este projeto implementa uma aplicação de console para criar as configurações de reservas de salas de estudo na universidade e gerenciá-las.
