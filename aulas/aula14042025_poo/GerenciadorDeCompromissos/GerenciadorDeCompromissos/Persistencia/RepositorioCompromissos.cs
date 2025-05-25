@@ -1,4 +1,8 @@
 namespace ConsoleApp.Persistencia;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.IO;
+using Modelos; 
 
   public class RepositorioCompromissos{
     private const string Caminho = "agenda.json";
