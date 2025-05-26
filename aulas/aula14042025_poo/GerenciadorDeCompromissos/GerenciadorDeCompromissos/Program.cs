@@ -1,49 +1,75 @@
 ﻿using ConsoleApp.Modelos;
+using ConsoleApp.Persistencia;
  
  
- Console.WriteLine("Configuração das reservas de salas\n");
-            Console.Write("Data mínima (dd/MM/yyyy): ");
-            var dataMin = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
-            Console.Write("Data máxima (dd/MM/yyyy): ");
-            var dataMax = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
-            Console.Write("Hora mínima (HH:mm): ");
-            var horaMin = TimeSpan.Parse(Console.ReadLine());
-            Console.Write("Hora máxima (HH:mm): ");
-            var horaMax = TimeSpan.Parse(Console.ReadLine());
+var usuarios = RepositorioCompromissos.Carregar();
 
-            ConfiguracaoReserva config = new(dataMin, dataMax, horaMin, horaMax);
 
-            Console.WriteLine("Cadastro da reserva\n");
-            Console.Write("Data da reserva (dd/MM/yyyy): ");
-            var data = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
-            Console.Write("Hora da reserva (hh:mm): ");
-            var hora = TimeSpan.Parse(Console.ReadLine());
-            Console.Write("Descrição da sala(código da sala): ");
-            var descricao = Console.ReadLine();
-            Console.Write("Capacidade: ");
-            var capacidade = int.Parse(Console.ReadLine());
+Console.WriteLine("Informe seu nome:");
+string nome = Console.ReadLine()!;
+var usuario = usuarios.FirstOrDefault(u => u.Nome == nome) ?? new Usuario(nome);
 
-            Reserva reserva = new(config);
-            reserva.RegistrarData(data);
-            reserva.RegistrarHora(hora);
-            reserva.RegistrarDescricao(descricao);
-            reserva.RegistrarCapacidade(capacidade);
-            reserva.ValidarReserva();
+if (!usuarios.Contains(usuario)) usuarios.Add(usuario);
 
-            if (reserva.Erros.Count == 0)
-            {
-                Console.WriteLine("Reserva feita corretamente: ");
-                Console.WriteLine(reserva);
-            }
-            else
-            {
-                Console.WriteLine("Erro na reserva: ");
-                foreach (var erro in reserva.Erros)
-                {
-                    Console.WriteLine($"- {erro}");
-                }
-            }
+int opcao;
 
-            Console.WriteLine("Pressione qualquer tecla para sair");
-            Console.ReadKey();
-      
+do{
+  
+    Console.WriteLine("\n1. Adicionar compromisso\n2. Listar compromissos\n0. Sair");
+    opcao = int.Parse(Console.ReadLine()!);
+
+    if(opcao == 1){
+
+        Console.Write("Data (dd/MM/yyyy): ");
+        DateTime data = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+
+        Console.Write("Hora (HH:mm): ");
+        TimeSpan hora = TimeSpan.ParseExact(Console.ReadLine()!, "hh\\:mm", null);
+        
+        Console.Write("Descrição: ");
+        string descricao = Console.ReadLine()!;
+        
+        Console.Write("Local: ");
+        string nomeLocal = Console.ReadLine()!;
+        
+        Console.Write("Capacidade: ");
+        int capacidade = int.Parse(Console.ReadLine()!);
+
+        var local = new Local(nomeLocal, capacidade);
+        var compromisso = new Compromisso(data + hora, descricao, usuario, local);
+
+        Console.Write("Quantos participantes? ");
+        int total = int.Parse(Console.ReadLine()!);
+        
+        for (int i = 0; i < total; i++){
+            
+            Console.Write($"Participante {i + 1}: ");
+            compromisso.AdicionarParticipante(new Participante(Console.ReadLine()!));
+        }
+
+        Console.Write("Deseja adicionar uma anotação? (s/n): ");
+        
+        if (Console.ReadLine()!.ToLower() == "s"){
+            
+            Console.Write("Texto da anotação: ");
+            compromisso.AdicionarAnotacao(Console.ReadLine()!);
+        }
+
+       usuario.AdicionarCompromisso(compromisso);
+       RepositorioCompromissos.Salvar(usuarios);
+
+
+        Console.WriteLine("Compromisso adicionado!");
+    } else if (opcao == 2){
+        foreach (var compromisso in usuario.Compromissos){
+
+            Console.WriteLine(compromisso);
+            foreach (var anotacao in compromisso.Anotacoes) Console.WriteLine("  - " + anotacao);
+        }
+    }
+
+    RepositorioCompromissos.Salvar(usuarios);
+
+} while(opcao != 0);
+
+Console.WriteLine("Encerrando...");
