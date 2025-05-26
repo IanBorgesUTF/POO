@@ -9,15 +9,15 @@
         "$values": [
           {
             "$id": "4",
-            "DataHora": "2025-11-17T14:30:00",
-            "Descricao": "teste",
+            "DataHora": "2025-05-26T00:01:00",
+            "Descricao": "entrega ap-04",
             "Usuario": {
               "$ref": "2"
             },
             "Local": {
               "$id": "5",
-              "Nome": "teste",
-              "Capacidade": 10
+              "Nome": "moodle",
+              "Capacidade": 3
             },
             "Participantes": {
               "$id": "6",
@@ -38,7 +38,13 @@
             },
             "Anotacoes": {
               "$id": "9",
-              "$values": []
+              "$values": [
+                {
+                  "$id": "10",
+                  "Texto": "entregue",
+                  "DataCriacao": "2025-05-25T21:26:16.392682-03:00"
+                }
+              ]
             }
           }
         ]

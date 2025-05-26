@@ -1,7 +1,7 @@
 namespace ConsoleApp.Modelos;
 
  public class Anotacao{
-    public string Texto { get; set; }
+    public string Texto { get; set; } = "";
     public DateTime DataCriacao { get; set; }
 
     public Anotacao() { }
