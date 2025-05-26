@@ -38,6 +38,6 @@ public class Compromisso{
 
     public override string ToString(){
         
-        return $"[{DataHora:dd/MM/yyyy HH:mm}] {Descricao}, {Local?.Nome} com {Participantes.Count} participantes";
+        return $"[{DataHora:dd/MM/yyyy HH:mm}] {Descricao}, no/a {Local?.Nome} com {Participantes.Count} participante/s";
     }
 }

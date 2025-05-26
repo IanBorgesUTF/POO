@@ -1,7 +1,7 @@
 namespace ConsoleApp.Modelos;
 
  public class Participante{
-    public string Nome { get; set; }
+    public string Nome { get; set; } = "";
     public List<Compromisso> Compromissos { get; set; } = new();
 
         public Participante() { }
