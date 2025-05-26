@@ -2,19 +2,22 @@ namespace ConsoleApp.Modelos;
 
 public class Compromisso{
     public DateTime DataHora { get; set; }
-    public string Descricao { get; set; }
+    public string Descricao { get; set; } = "";
     public Usuario Usuario { get; set; }
-    public Local Local { get; set; }
+    public Local Local { get; set; } 
 
     public List<Participante> Participantes { get; set; } = new();
     public List<Anotacao> Anotacoes { get; set; } = new();
+    
+    public Compromisso() { }
 
-    public Compromisso(DateTime dataHora, string descricao, Usuario usuario, Local local){
-        
+    public Compromisso(DateTime dataHora, string descricao, Usuario usuario, Local local)
+    {
+
         if (dataHora <= DateTime.Now) throw new ArgumentException("Data/hora deve estar no futuro.");
-        
+
         if (string.IsNullOrWhiteSpace(descricao)) throw new ArgumentException("Descrição obrigatória.");
-        
+
         DataHora = dataHora;
         Descricao = descricao;
         Usuario = usuario;
@@ -35,6 +38,6 @@ public class Compromisso{
 
     public override string ToString(){
         
-        return $"[{DataHora:dd/MM/yyyy HH:mm}] {Descricao} @ {Local?.Nome} com {Participantes.Count} participantes";
+        return $"[{DataHora:dd/MM/yyyy HH:mm}] {Descricao}, {Local?.Nome} com {Participantes.Count} participantes";
     }
 }

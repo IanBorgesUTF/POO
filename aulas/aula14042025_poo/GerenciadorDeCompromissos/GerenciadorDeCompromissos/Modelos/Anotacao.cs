@@ -4,7 +4,10 @@ namespace ConsoleApp.Modelos;
     public string Texto { get; set; }
     public DateTime DataCriacao { get; set; }
 
-    public Anotacao(string texto){
+    public Anotacao() { }
+
+    public Anotacao(string texto)
+    {
         Texto = texto;
         DataCriacao = DateTime.Now;
     }

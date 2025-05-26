@@ -4,10 +4,13 @@ namespace ConsoleApp.Modelos;
     public string Nome { get; set; }
     public List<Compromisso> Compromissos { get; set; } = new();
 
-    public Participante(string nome){
-           
-            Nome = nome;
-    }
+        public Participante() { }
+
+    public Participante(string nome)
+        {
+
+                Nome = nome;
+        }
 
     public void AdicionarCompromisso(Compromisso c){
            

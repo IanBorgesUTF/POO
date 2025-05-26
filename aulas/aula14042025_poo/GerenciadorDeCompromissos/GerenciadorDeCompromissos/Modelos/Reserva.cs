@@ -4,7 +4,7 @@ namespace ConsoleApp.Modelos;
         private ConfiguracaoReserva _configReserva;
         private DateTime _data;
         private TimeSpan _hora;
-        private string _descricaoSala;
+        private string? _descricaoSala;
         private int _capacidade;
 
         public List<string> Erros { 

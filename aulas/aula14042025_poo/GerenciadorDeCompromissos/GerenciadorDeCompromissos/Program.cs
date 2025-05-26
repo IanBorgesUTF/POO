@@ -55,13 +55,16 @@ do{
             compromisso.AdicionarAnotacao(Console.ReadLine()!);
         }
 
-        usuario.AdicionarCompromisso(compromisso);
+       usuario.AdicionarCompromisso(compromisso);
+       RepositorioCompromissos.Salvar(usuarios);
+
+
         Console.WriteLine("Compromisso adicionado!");
     } else if (opcao == 2){
-        foreach (var c in usuario.Compromissos){
+        foreach (var compromisso in usuario.Compromissos){
 
-            Console.WriteLine(c);
-            foreach (var a in c.Anotacoes) Console.WriteLine("  - " + a);
+            Console.WriteLine(compromisso);
+            foreach (var anotacao in compromisso.Anotacoes) Console.WriteLine("  - " + anotacao);
         }
     }
 

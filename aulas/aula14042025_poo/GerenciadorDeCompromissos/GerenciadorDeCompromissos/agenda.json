@@ -1,0 +1,48 @@
+{
+  "$id": "1",
+  "$values": [
+    {
+      "$id": "2",
+      "Nome": "ian",
+      "Compromissos": {
+        "$id": "3",
+        "$values": [
+          {
+            "$id": "4",
+            "DataHora": "2025-11-17T14:30:00",
+            "Descricao": "teste",
+            "Usuario": {
+              "$ref": "2"
+            },
+            "Local": {
+              "$id": "5",
+              "Nome": "teste",
+              "Capacidade": 10
+            },
+            "Participantes": {
+              "$id": "6",
+              "$values": [
+                {
+                  "$id": "7",
+                  "Nome": "ian",
+                  "Compromissos": {
+                    "$id": "8",
+                    "$values": [
+                      {
+                        "$ref": "4"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "Anotacoes": {
+              "$id": "9",
+              "$values": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
