@@ -1,96 +1,84 @@
 
 --------------------------------Nomes dos integrantes do grupo-----------------------------------------
 
-Bruno Rocco Wolfardt;
-Felipe Sousa da Costa;
+Daniel Vier Alberton;
 Ian Fernandes Borges.
 
 -------------------------------------------------------------------------------------------------------
-Reserva de Salas
+-----------------------------Sistema de Biblioteca com Empréstimos-----------------------------
 
-Este projeto implementa uma aplicação de console para criar as configurações de reservas de salas de estudo na universidade e gerenciá-las.
+Este sistema é composto por três classes: Livro, Leitor e Emprestimo. A classe Livro possui atributos como título, autor e um status de disponibilidade. A classe Leitor representa um usuário da biblioteca que mantém uma lista de empréstimos realizados. Já a classe Emprestimo funciona como intermediária entre o livro e o leitor, registrando as datas de empréstimo e devolução.
 
---------------------------------Estrutura do Projeto-----------------------------------------
+O Program.cs permite que o usuário informe seu nome, escolha um livro disponível da lista e realize um empréstimo. O sistema valida se o livro está disponível antes de emprestar.
 
----------------------------------ConfiguracaoReserva.cs-----------------------------------------
+-------------------------------------------------------------------------------------------------------
 
-Classe responsável por validar e guardar o intervalo de datas e intervalo de horas permitidas para as reservas.
+-----------------------------Sistema de Cadastro Escolar-----------------------------
 
-*Propriedades:*
+Neste sistema, temos a superclasse Pessoa, que contém atributos comuns como nome, CPF e data de nascimento. As subclasses são Aluno, Professor e Funcionario, cada uma com seus próprios atributos: matrícula e turma para aluno, disciplinas para professor e setor para funcionário.
 
-DateTime DataMinima
-DateTime DataMaxima
-TimeSpan HoraMinima
-TimeSpan HoraMaxima
+O Program.cs solicita que o usuário informe o tipo de pessoa a ser cadastrada e os respectivos dados. Após o preenchimento, os dados são exibidos no console.
 
-O construtor recebe as quatro propriedades e realiza validações iniciais:
+-------------------------------------------------------------------------------------------------------
 
-DataMinima < DataMaxima e HoraMinima < HoraMaxima
+-----------------------------Sistema de Cursos Online-----------------------------
 
-*Métodos de validação:*
+As classes principais são Curso, Aula, AlunoCurso e Matricula. Curso contém uma lista de aulas, e cada aula tem título, duração e professor. AlunoCurso representa o aluno e guarda suas matrículas. A Matricula liga o aluno ao curso e armazena dados como progresso e data de inscrição.
 
-*bool ValidarData(DateTime data) - Usada para verificar se a data informada para reserva está entre o intervalo definido na configuração da reserva.
+O Program.cs permite ao usuário cadastrar um curso com várias aulas e realizar a matrícula de um aluno nesse curso.
 
-*bool ValidarHora(TimeSpan hora) - Usada para verificar se a hora informada para reserva está entre o intervalo definido na configuração da reserva.
+-------------------------------------------------------------------------------------------------------
 
----------------------------------Reserva.cs---------------------------------
+-----------------------------Sistema de Pet Shop-----------------------------
 
-Classe que representa realmente uma reserva, usando uma instância de ConfiguracaoReserva para validar suas entradas de valores.
+A superclasse Animal contém atributos comuns como nome, idade e peso, além de uma referência ao Dono. As subclasses Cachorro, Gato e Passaro possuem características específicas como raça, porte, comportamento, pelagem, etc.
 
-*Atributos privados:*
+O Program.cs permite ao usuário informar dados do dono, do tipo de animal e cadastrar um pet com as informações adequadas.
 
-_data
-_hora
-_descricaoSala
-_capacidade
+-------------------------------------------------------------------------------------------------------
 
-_config (referência à configuração)
+-----------------------------Sistema de Vendas com Composição-----------------------------
 
-*Lista de erros - List<string> Erros guarda uma lista contendo as mensagens de validação dos possíveis erros gerados por conta dos dados de entrada
-    O construtor Reserva(ConfiguracaoReserva config) inicializa a lista de erros e guarda a configuração
+As classes envolvidas são Produto, ItemPedido e Pedido. Produto representa o item com nome, preço e código. ItemPedido associa um produto a uma quantidade e calcula o subtotal. Pedido contém uma lista de itens e calcula o total do pedido.
 
-*Métodos de registro:*
+No Program.cs, o usuário pode adicionar vários itens ao pedido e ao final visualizar o valor total da compra.
 
-*RegistrarData(DateTime data) - Registra a data no formato dd/mm/yyyy
+-------------------------------------------------------------------------------------------------------
 
-*RegistrarHora(TimeSpan hora) - Registra a data no formato hh:mm
+-----------------------------Sistema de Controle de Veículos e Manutenções-----------------------------
 
-*RegistrarDescricao(string descricao) - Registra a descrição da reserva que seria o nome ou código da sala a ser reservada
+O sistema possui as classes Veiculo e Manutencao. Veiculo possui atributos como modelo, placa e tipo, além de uma lista de manutenções. Cada Manutencao tem data, descrição e tipo (preventiva ou corretiva).
 
-*RegistrarCapacidade(int capacidade) - Registra a capacidade de pessoas prevista para a sala reservada sendo no máximo 39 pessoas
+O Program.cs permite o cadastro de um veículo e o registro de manutenções, com validação para impedir mais de uma manutenção no mesmo dia.
 
-*ValidarReserva() - Chama ValidarData e ValidarHora de ConfiguracaoReserva, e verifica capacidade de pessoas(1 a 39)
+-------------------------------------------------------------------------------------------------------
 
-*ToString() - Formata a saída em dd/MM/yyyy para data e hh:mm para hora
+-----------------------------Sistema de Recrutamento-----------------------------
 
----------------------------------Program.cs-----------------------------------------
+As principais classes são Candidato, Vaga e Candidatura. Candidato armazena dados pessoais e currículo. Vaga descreve o cargo, empresa e requisitos. Candidatura associa um candidato a uma vaga, armazenando a data de envio e o status.
 
-É onde está o fluxo principal da aplicação, ele atua em primeiro o usuário fazendo a configuração iniciais das reservas e depois registrando uma reserva
+O Program.cs solicita dados do candidato e da vaga, cria uma candidatura e exibe o status.
 
-*Configuração:*
+-------------------------------------------------------------------------------------------------------
 
-Solicita ao usuário as datas mínima e máxima (formato dd/MM/yyyy).
+-----------------------------Sistema de Streaming-----------------------------
 
-Solicita as horas mínima e máxima (formato hh:mm).
+A superclasse Midia contém atributos como título, duração e gênero. Suas subclasses são Filme, Serie e Documentario, cada uma com propriedades específicas. Serie também contém uma lista de episódios. Cada classe implementa o método polimórfico ExibirResumo() de forma distinta.
 
-Cria a instância de ConfiguracaoReserva usando:
-ReservaConfig = new(dataMin, dataMax, horaMin, horaMax)
+No Program.cs, o usuário pode cadastrar uma mídia e ver o resumo exibido conforme o tipo de conteúdo.
 
-*Reserva:*
+-------------------------------------------------------------------------------------------------------
 
-Solicita ao usuário a data da reserva (dd/MM/yyyy)
+-----------------------------Sistema de Controle de Treinos-----------------------------
 
-Solicita a hora da reserva (hh:mm)
+As classes envolvidas são AlunoTreino, Treino e Exercicio. AlunoTreino contém os dados do aluno e uma lista de treinos. Cada Treino possui objetivo, data de criação e uma lista de exercícios. Exercicio detalha o nome, número de séries, repetições e carga.
 
-Solicita a descrição da sala(código da sala)
+O Program.cs permite ao usuário cadastrar um treino com vários exercícios e exibe a carga total calculada.
 
-Solicita a capacidade
+-------------------------------------------------------------------------------------------------------
 
-Cria a instância de Reserva usando:
-Reserva reserva = new(config)
+-----------------------------Sistema de Eventos Culturais-----------------------------
 
-Registra cada campo
+A superclasse Evento define atributos comuns como título, data, local e capacidade. As subclasses Oficina, Palestra e Show adicionam dados específicos como material, palestrante ou banda. A classe Participante pode se inscrever em vários eventos. O método ExibirInformacoes() é polimórfico e exibe os detalhes específicos do evento.
 
-Chama reserva.ValidarReserva()
-
-Por fim, depois de validado exibe sucesso ou a lista de erros ao usuário.
+O Program.cs permite que o usuário informe os dados do evento e exibe as informações formatadas conforme o tipo.
