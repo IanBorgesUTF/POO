@@ -1,276 +1,300 @@
 ﻿using ConsoleApp.Modelos;
-using ConsoleApp.Persistencia;
  
         int opcao;
         do
         {
             Console.WriteLine("Escolha um exercício para testar:");
-            Console.WriteLine("1. Biblioteca");
-            Console.WriteLine("2. Cadastro Escolar");
-            Console.WriteLine("3. Cursos Online");
-            Console.WriteLine("4. Pet Shop");
-            Console.WriteLine("5. Vendas");
-            Console.WriteLine("6. Veículos");
-            Console.WriteLine("7. Recrutamento");
-            Console.WriteLine("8. Streaming");
-            Console.WriteLine("9. Treinos");
-            Console.WriteLine("10. Eventos Culturais");
+            Console.WriteLine("1. Produto (Catálogo)");
+            Console.WriteLine("2. Música (Biblioteca)");
+            Console.WriteLine("3. Filme (Consulta por Gênero)");
+            Console.WriteLine("4. Funcionário e Departamento");
+            Console.WriteLine("5. Paciente (Filtro por Idade)");
+            Console.WriteLine("6. Equipamento TI (In-Memory)");
+            Console.WriteLine("7. Pedido Restaurante");
+            Console.WriteLine("8. Arquivo Digital");
+            Console.WriteLine("9. Reserva Hotel");
+            Console.WriteLine("10. Curso Online");
             Console.WriteLine("0. Sair");
             opcao = int.Parse(Console.ReadLine()!);
 
             Console.WriteLine();
             switch (opcao)
             {
-                case 1: TestarBiblioteca(); break;
-                case 2: TestarCadastroEscolar(); break;
-                case 3: TestarCursosOnline(); break;
-                case 4: TestarPetShop(); break;
-                case 5: TestarVendas(); break;
-                case 6: TestarVeiculos(); break;
-                case 7: TestarRecrutamento(); break;
-                case 8: TestarStreaming(); break;
-                case 9: TestarTreinos(); break;
-                case 10: TestarEventosCulturais(); break;
+                case 1: TestarProduto(); break;
+                case 2: TestarMusica(); break;
+                case 3: TestarFilme(); break;
+                case 4: TestarFuncionario(); break;
+                case 5: TestarPaciente(); break;
+                case 6: TestarEquipamentoTI(); break;
+                case 7: TestarPedidoRestaurante(); break;
+                case 8: TestarArquivoDigital(); break;
+                case 9: TestarReservaHotel(); break;
+                case 10: TestarCursoOnline(); break;
                 case 0: Console.WriteLine("Encerrando..."); break;
                 default: Console.WriteLine("Opção inválida."); break;
             }
             Console.WriteLine();
         } while (opcao != 0);
-    
-    
 
-    static void TestarBiblioteca()
+    static void TestarProduto()
     {
-        var livros = new List<Livro>
+        var repo = new ProdutoJsonRepository();
+        Console.Write("Nome: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Descrição: ");
+        string desc = Console.ReadLine()!;
+        Console.Write("Preço: ");
+        decimal preco = decimal.Parse(Console.ReadLine()!);
+        Console.Write("Estoque: ");
+        int estoque = int.Parse(Console.ReadLine()!);
+
+        repo.Adicionar(new Produto
         {
-            new Livro { Titulo = "1984", Autor = "George Orwell" },
-            new Livro { Titulo = "O Hobbit", Autor = "J.R.R. Tolkien" }
-        };
+            Nome = nome,
+            Descricao = desc,
+            Preco = preco,
+            Estoque = estoque
+        });
 
-        Console.Write("Nome do leitor: ");
-        var leitor = new Leitor { Nome = Console.ReadLine()! };
-
-        Console.WriteLine("Livros disponíveis:");
-        for (int i = 0; i < livros.Count; i++)
-            Console.WriteLine($"{i + 1}. {livros[i].Titulo} - {(livros[i].Disponivel ? "Disponível" : "Indisponível")}");
-
-        Console.Write("Escolha o número do livro para emprestar: ");
-        int escolha = int.Parse(Console.ReadLine()!) - 1;
-
-        leitor.RealizarEmprestimo(livros[escolha]);
+        Console.WriteLine("Produto cadastrado com sucesso.");
     }
 
-    static void TestarCadastroEscolar()
+    static void TestarMusica()
     {
-        Console.Write("Digite tipo de pessoa (aluno, professor, funcionario): ");
+        var repo = new GenericJsonRepository<Musica>("musicas.json");
+        Console.Write("Título: ");
+        string titulo = Console.ReadLine()!;
+        Console.Write("Artista: ");
+        string artista = Console.ReadLine()!;
+        Console.Write("Álbum: ");
+        string album = Console.ReadLine()!;
+        Console.Write("Duração (minutos): ");
+        double minutos = double.Parse(Console.ReadLine()!);
+
+        repo.Adicionar(new Musica
+        {
+            Titulo = titulo,
+            Artista = artista,
+            Album = album,
+            Duracao = TimeSpan.FromMinutes(minutos)
+        });
+
+        Console.WriteLine("Música adicionada.");
+    }
+
+    static void TestarFilme()
+    {
+        var repo = new FilmeJsonRepository();
+        Console.Write("Título: ");
+        string titulo = Console.ReadLine()!;
+        Console.Write("Diretor: ");
+        string diretor = Console.ReadLine()!;
+        Console.Write("Ano de lançamento: ");
+        int ano = int.Parse(Console.ReadLine()!);
+        Console.Write("Gênero: ");
+        string genero = Console.ReadLine()!;
+
+        repo.Adicionar(new Filme
+        {
+            Titulo = titulo,
+            Diretor = diretor,
+            AnoLancamento = ano,
+            Genero = genero
+        });
+
+        Console.Write("Digite o gênero para filtrar: ");
+        string filtro = Console.ReadLine()!;
+        var lista = repo.ObterPorGenero(filtro);
+
+        foreach (var filme in lista)
+            Console.WriteLine($"Filme: {filme.Titulo}, Diretor: {filme.Diretor}");
+    }
+
+    static void TestarFuncionario()
+    {
+        var repoDepto = new GenericJsonRepository<Departamento>("departamentos.json");
+        var repoFunc = new GenericJsonRepository<Funcionario>("funcionarios.json");
+
+        Console.Write("Nome do departamento: ");
+        string nomeDepto = Console.ReadLine()!;
+        Console.Write("Sigla do departamento: ");
+        string sigla = Console.ReadLine()!;
+
+        var depto = new Departamento { NomeDepartamento = nomeDepto, Sigla = sigla };
+        repoDepto.Adicionar(depto);
+
+        Console.Write("Nome do funcionário: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Cargo: ");
+        string cargo = Console.ReadLine()!;
+
+        repoFunc.Adicionar(new Funcionario
+        {
+            NomeCompleto = nome,
+            Cargo = cargo,
+            DepartamentoId = depto.Id
+        });
+
+        Console.WriteLine("Funcionário cadastrado com sucesso.");
+    }
+
+    static void TestarPaciente()
+    {
+        var repo = new PacienteJsonRepository();
+
+        Console.Write("Nome do paciente: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Data de nascimento (yyyy-MM-dd): ");
+        DateTime nascimento = DateTime.Parse(Console.ReadLine()!);
+        Console.Write("Contato de emergência: ");
+        string contato = Console.ReadLine()!;
+
+        repo.Adicionar(new Paciente
+        {
+            NomeCompleto = nome,
+            DataNascimento = nascimento,
+            ContatoEmergencia = contato
+        });
+
+        Console.Write("Idade mínima: ");
+        int min = int.Parse(Console.ReadLine()!);
+        Console.Write("Idade máxima: ");
+        int max = int.Parse(Console.ReadLine()!);
+
+        var pacientes = repo.ObterPorFaixaEtaria(min, max);
+        foreach (var p in pacientes)
+            Console.WriteLine($"Paciente: {p.NomeCompleto}");
+    }
+
+    static void TestarEquipamentoTI()
+    {
+        var repo = new InMemoryEquipamentoTIRepository();
+
+        Console.Write("Nome do equipamento: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Tipo: ");
+        string tipo = Console.ReadLine()!;
+        Console.Write("Número de série: ");
+        string numeroSerie = Console.ReadLine()!;
+        Console.Write("Data de aquisição (yyyy-MM-dd): ");
+        DateTime data = DateTime.Parse(Console.ReadLine()!);
+
+        repo.Adicionar(new EquipamentoTI
+        {
+            NomeEquipamento = nome,
+            TipoEquipamento = tipo,
+            NumeroSerie = numeroSerie,
+            DataAquisicao = data
+        });
+
+        Console.WriteLine("Equipamento registrado.");
+    }
+
+    static void TestarPedidoRestaurante()
+    {
+        var repo = new GenericJsonRepository<ItemCardapio>("cardapio.json");
+
+        Console.Write("Tipo (prato/bebida): ");
         string tipo = Console.ReadLine()!.ToLower();
 
         Console.Write("Nome: ");
         string nome = Console.ReadLine()!;
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine()!;
-        Console.Write("Data de nascimento (dd/MM/yyyy): ");
-        DateTime nascimento = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
+        Console.Write("Preço: ");
+        decimal preco = decimal.Parse(Console.ReadLine()!);
 
-        if (tipo == "aluno")
+        if (tipo == "prato")
         {
-            Console.Write("Matrícula: ");
-            string matricula = Console.ReadLine()!;
-            Console.Write("Turma: ");
-            string turma = Console.ReadLine()!;
-            var aluno = new Aluno { Nome = nome, CPF = cpf, DataNascimento = nascimento, Matricula = matricula, Turma = turma };
-            Console.WriteLine($"Aluno cadastrado: {aluno.Nome}, turma {aluno.Turma}");
-        }
-        else if (tipo == "professor")
-        {
-            Console.Write("Disciplinas (separadas por vírgula): ");
-            string[] disciplinas = Console.ReadLine()!.Split(',');
-            var professor = new Professor { Nome = nome, CPF = cpf, DataNascimento = nascimento, Disciplinas = new List<string>(disciplinas) };
-            Console.WriteLine($"Professor: {professor.Nome}, disciplinas: {string.Join(", ", professor.Disciplinas)}");
-        }
-        else if (tipo == "funcionario")
-        {
-            Console.Write("Setor: ");
-            string setor = Console.ReadLine()!;
-            var funcionario = new Funcionario { Nome = nome, CPF = cpf, DataNascimento = nascimento, Setor = setor };
-            Console.WriteLine($"Funcionário: {funcionario.Nome}, setor: {funcionario.Setor}");
+            Console.Write("Descrição detalhada: ");
+            string desc = Console.ReadLine()!;
+            Console.Write("Vegetariano (true/false): ");
+            bool vegetariano = bool.Parse(Console.ReadLine()!);
+
+            repo.Adicionar(new Prato
+            {
+                NomeItem = nome,
+                Preco = preco,
+                DescricaoDetalhada = desc,
+                Vegetariano = vegetariano
+            });
         }
         else
         {
-            Console.WriteLine("Tipo inválido.");
-        }
-    }
+            Console.Write("Volume (ml): ");
+            int volume = int.Parse(Console.ReadLine()!);
+            Console.Write("Alcoólica (true/false): ");
+            bool alcoolica = bool.Parse(Console.ReadLine()!);
 
-    static void TestarCursosOnline()
-    {
-        Console.Write("Nome do aluno: ");
-        var aluno = new AlunoCurso(Console.ReadLine()!);
-
-        Console.Write("Nome do curso: ");
-        string cursoNome = Console.ReadLine()!;
-        var curso = new Curso { Nome = cursoNome };
-
-        Console.Write("Quantas aulas o curso terá? ");
-        int totalAulas = int.Parse(Console.ReadLine()!);
-        for (int i = 0; i < totalAulas; i++)
-        {
-            Console.Write($"Aula {i + 1} - Título: ");
-            string titulo = Console.ReadLine()!;
-            Console.Write("Duração (min): ");
-            int duracao = int.Parse(Console.ReadLine()!);
-            Console.Write("Professor: ");
-            string prof = Console.ReadLine()!;
-            curso.Aulas.Add(new Aula { Titulo = titulo, DuracaoMin = duracao, Professor = prof });
+            repo.Adicionar(new Bebida
+            {
+                NomeItem = nome,
+                Preco = preco,
+                VolumeMl = volume,
+                Alcoolica = alcoolica
+            });
         }
 
-        aluno.Matriculas.Add(new Matricula { Curso = curso, DataInscricao = DateTime.Today, Progresso = 0 });
-        Console.WriteLine($"Aluno {aluno.Nome} matriculado no curso '{curso.Nome}' com {curso.Aulas.Count} aulas.");
+        Console.WriteLine("Item do cardápio adicionado.");
     }
 
-     static void TestarPetShop()
+    static void TestarArquivoDigital()
     {
-        Console.Write("Nome do dono: ");
-        var dono = new Dono { Nome = Console.ReadLine()! };
+        var repo = new ArquivoDigitalJsonRepository();
 
-        Console.Write("Tipo de animal (cachorro/gato/passaro): ");
-        string tipo = Console.ReadLine()!.ToLower();
+        Console.Write("Nome do arquivo: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Tipo do arquivo: ");
+        string tipo = Console.ReadLine()!;
+        Console.Write("Tamanho em bytes: ");
+        long tamanho = long.Parse(Console.ReadLine()!);
 
-        Animal animal = tipo switch
+        repo.Adicionar(new ArquivoDigital
         {
-            "cachorro" => new Cachorro { Raca = "", Porte = "", Temperamento = "" },
-            "gato" => new Gato { Pelagem = "", Comportamento = "" },
-            "passaro" => new Passaro { Especie = "", Envergadura = 0 },
-            _ => null
-        };
+            NomeArquivo = nome,
+            TipoArquivo = tipo,
+            TamanhoBytes = tamanho,
+            DataUpload = DateTime.Now
+        });
 
-        if (animal == null) { Console.WriteLine("Tipo inválido."); return; }
-
-        Console.Write("Nome do animal: "); animal.Nome = Console.ReadLine()!;
-        Console.Write("Idade: "); animal.Idade = int.Parse(Console.ReadLine()!);
-        Console.Write("Peso: "); animal.Peso = double.Parse(Console.ReadLine()!);
-        animal.Dono = dono;
-
-        Console.WriteLine($"Animal cadastrado: {animal.Nome}, dono: {dono.Nome}");
+        Console.WriteLine("Arquivo salvo.");
     }
 
-    static void TestarVendas()
+    static void TestarReservaHotel()
     {
-        var pedido = new Pedido();
-        while (true)
+        var repo = new ReservaHotelJsonRepository();
+
+        Console.Write("Nome do hóspede: ");
+        string nome = Console.ReadLine()!;
+        Console.Write("Data de entrada (yyyy-MM-dd): ");
+        DateTime entrada = DateTime.Parse(Console.ReadLine()!);
+        Console.Write("Data de saída (yyyy-MM-dd): ");
+        DateTime saida = DateTime.Parse(Console.ReadLine()!);
+        Console.Write("Status (Pendente, Confirmada, Cancelada): ");
+        StatusReserva status = Enum.Parse<StatusReserva>(Console.ReadLine()!);
+
+        repo.Adicionar(new ReservaHotel
         {
-            Console.Write("Produto: "); string nome = Console.ReadLine()!;
-            Console.Write("Preço: "); double preco = double.Parse(Console.ReadLine()!);
-            Console.Write("Código: "); string codigo = Console.ReadLine()!;
-            Console.Write("Quantidade: "); int qtd = int.Parse(Console.ReadLine()!);
+            NomeHospede = nome,
+            DataEntrada = entrada,
+            DataSaida = saida,
+            Status = status
+        });
 
-            pedido.Itens.Add(new ItemPedido { Produto = new Produto { Nome = nome, Preco = preco, Codigo = codigo }, Quantidade = qtd });
-
-            Console.Write("Adicionar mais itens? (s/n): ");
-            if (Console.ReadLine()!.ToLower() != "s") break;
-        }
-        Console.WriteLine($"Total do pedido: R$ {pedido.Total}");
+        Console.WriteLine("Reservas com status solicitado:");
+        foreach (var r in repo.ObterPorStatus(status))
+            Console.WriteLine($"{r.NomeHospede}: {r.DataEntrada:dd/MM} → {r.DataSaida:dd/MM}");
     }
 
-    static void TestarVeiculos()
+    static void TestarCursoOnline()
     {
-        Console.Write("Modelo: "); string modelo = Console.ReadLine()!;
-        Console.Write("Placa: "); string placa = Console.ReadLine()!;
-        Console.Write("Tipo: "); string tipo = Console.ReadLine()!;
+        var repo = new CursoOnlineJsonRepository();
+        var service = new CatalogoCursosService(repo);
 
-        var veiculo = new Veiculo { Modelo = modelo, Placa = placa, Tipo = tipo };
+        Console.Write("Título do curso: ");
+        string titulo = Console.ReadLine()!;
+        Console.Write("Instrutor: ");
+        string instrutor = Console.ReadLine()!;
 
-        Console.Write("Data da manutenção (dd/MM/yyyy): ");
-        DateTime data = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
-        Console.Write("Descrição: "); string desc = Console.ReadLine()!;
-        Console.Write("Tipo de manutenção: "); string tipoManut = Console.ReadLine()!;
+        bool sucesso = service.RegistrarCurso(new CursoOnline { Titulo = titulo, Instrutor = instrutor });
 
-        bool sucesso = veiculo.AdicionarManutencao(new Manutencao { DataServico = data, Descricao = desc, Tipo = tipoManut });
-        Console.WriteLine(sucesso ? "Manutenção registrada." : "Já existe manutenção nesta data.");
+        Console.WriteLine(sucesso ? "Curso cadastrado com sucesso." : "Curso já registrado.");
     }
-
-    static void TestarRecrutamento()
-    {
-        Console.Write("Nome do candidato: "); string nome = Console.ReadLine()!;
-        Console.Write("Email: "); string email = Console.ReadLine()!;
-        Console.Write("Currículo: "); string curriculo = Console.ReadLine()!;
-        var candidato = new Candidato { Nome = nome, Email = email, Curriculo = curriculo };
-
-        Console.Write("Vaga: "); string vaga = Console.ReadLine()!;
-        Console.Write("Empresa: "); string empresa = Console.ReadLine()!;
-        Console.Write("Descrição da vaga: "); string descricao = Console.ReadLine()!;
-        var v = new Vaga { Titulo = vaga, Empresa = empresa, Descricao = descricao };
-
-        var candidatura = new Candidatura { Vaga = v, Candidato = candidato, DataEnvio = DateTime.Today, Status = "Enviada" };
-        Console.WriteLine($"Candidatura enviada para {v.Titulo} por {candidato.Nome}");
-    }
-
-    static void TestarStreaming()
-    {
-        Console.Write("Tipo de mídia (filme/série/documentário): ");
-        string tipo = Console.ReadLine()!.ToLower();
-
-        Midia midia = tipo switch
-        {
-            "filme" => new Filme { Diretor = "", Ano = 0, Elenco = "" },
-            "série" => new Serie { Temporadas = 0, Episodios = 0 },
-            "documentário" => new Documentario { Tema = "", Narrador = "" },
-            _ => null
-        };
-
-        if (midia == null) { Console.WriteLine("Tipo inválido."); return; }
-
-        Console.Write("Título: "); midia.Titulo = Console.ReadLine()!;
-        Console.Write("Duração: "); midia.Duracao = int.Parse(Console.ReadLine()!);
-        Console.Write("Gênero: "); midia.Genero = Console.ReadLine()!;
-        midia.ExibirResumo();
-    }
-
-    static void TestarTreinos()
-    {
-        Console.Write("Nome do aluno: "); string nome = Console.ReadLine()!;
-        var aluno = new AlunoTreino { Nome = nome };
-        var treino = new Treino { DataCriacao = DateTime.Today };
-
-        Console.Write("Objetivo do treino: "); treino.Objetivo = Console.ReadLine()!;
-
-        while (true)
-        {
-            Console.Write("Exercício: "); string ex = Console.ReadLine()!;
-            Console.Write("Séries: "); int s = int.Parse(Console.ReadLine()!);
-            Console.Write("Repetições: "); int r = int.Parse(Console.ReadLine()!);
-            Console.Write("Carga: "); double c = double.Parse(Console.ReadLine()!);
-
-            treino.Exercicios.Add(new Exercicio { Nome = ex, Series = s, Repeticoes = r, Carga = c });
-
-            Console.Write("Adicionar mais? (s/n): ");
-            if (Console.ReadLine()!.ToLower() != "s") break;
-        }
-
-        aluno.Treinos.Add(treino);
-        Console.WriteLine($"Carga total: {treino.CalcularCargaTotal()}kg");
-    }
-
-    static void TestarEventosCulturais()
-{
-    Console.Write("Tipo de evento (oficina/palestra/show): ");
-    string tipo = Console.ReadLine()!.ToLower();
-
-    Evento evento = tipo switch
-    {
-        "oficina" => new Oficina { Material = "", MaxParticipantes = 0 },
-        "palestra" => new Palestra { Palestrante = "", Topico = "", DuracaoPrevista = 0 },
-        "show" => new Show { Artista = "", Estilo = "", ClassificacaoEtaria = "" },
-        _ => null
-    };
-
-    if (evento == null) { Console.WriteLine("Tipo inválido."); return; }
-
-    Console.Write("Título: "); evento.Titulo = Console.ReadLine()!;
-    Console.Write("Data (dd/MM/yyyy): "); evento.Data = DateTime.ParseExact(Console.ReadLine()!, "dd/MM/yyyy", null);
-    Console.Write("Horário: "); evento.Horario = Console.ReadLine()!;
-    Console.Write("Local: "); evento.Local = Console.ReadLine()!;
-    Console.Write("Capacidade: "); evento.Capacidade = int.Parse(Console.ReadLine()!);
-    evento.ExibirInformacoes();
-}
-
-
