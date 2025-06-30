@@ -1,0 +1,18 @@
+{
+  "Nome": "Jogador1",
+  "Inventario": {
+    "Itens": [
+      {
+        "TipoInterno": "Municao",
+        "Tipo": 2,
+        "Nome": "Muni\u00E7\u00E3o Sniper",
+        "Descricao": "Muni\u00E7\u00F5es para fuzis de atirador",
+        "Dano": 200,
+        "Quantidade": 50,
+        "Empilhavel": true,
+        "Id": "33122e0c-eb9a-4dea-abb9-1ee6c3f545da"
+      }
+    ],
+    "EspacosOcupados": 1
+  }
+}
