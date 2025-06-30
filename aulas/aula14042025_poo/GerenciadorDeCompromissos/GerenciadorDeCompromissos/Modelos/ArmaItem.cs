@@ -43,25 +43,51 @@ public override void Usar(Inventario inventario)
         _ => throw new NotSupportedException()
     };
 
-    var municao = inventario.Itens
+    // Localiza todos os packs disponíveis dessa munição
+    var packs = inventario.Itens
         .OfType<Municao>()
-        .FirstOrDefault(m => m.Tipo == tipoNecessario);
+        .Where(m => m.Tipo == tipoNecessario)
+        .OrderBy(m => m.Quantidade)
+        .ToList();
 
-    if (municao == null || municao.Quantidade == 0)
+    if (packs.Count == 0)
     {
         Console.WriteLine($"Sem munição ({tipoNecessario}) para usar {Nome}.");
         return;
     }
 
-    municao.Quantidade--;
-    Console.WriteLine($"Usando {Nome} com {tipoNecessario}: causando {municao.Dano} de dano. Munições restantes: {municao.Quantidade}");
+    // Consome do pack com menor quantidade
+    var packMenor = packs.First();
+    packMenor.Quantidade--;
+    Console.WriteLine($"Usando {Nome} com {tipoNecessario}: causando {packMenor.Dano} de dano. Munição restante no pack: {packMenor.Quantidade}");
 
-    if (municao.Quantidade == 0)
+    if (packMenor.Quantidade == 0)
     {
-        inventario.Remover(municao.Id);
-        Console.WriteLine("O pack de munição foi removido (acabou).");
+        inventario.Remover(packMenor.Id);
+        Console.WriteLine("Um pack de munição foi removido (acabou).");
+        packs.Remove(packMenor); // remove da lista local para fusão
+    }
+
+    // Agora tentar consolidar todos os packs restantes
+    if (packs.Count > 1)
+    {
+        var principal = packs.First(); // este receberá as sobras
+        foreach (var outro in packs.Skip(1).ToList())
+        {
+            int espaco = 99 - principal.Quantidade;
+            int transferir = Math.Min(espaco, outro.Quantidade);
+            principal.Quantidade += transferir;
+            outro.Quantidade -= transferir;
+
+            if (outro.Quantidade == 0)
+            {
+                inventario.Remover(outro.Id);
+                Console.WriteLine("Outro pack de munição foi removido após fusão.");
+            }
+        }
     }
 }
+
 
 
 
