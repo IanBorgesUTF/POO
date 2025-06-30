@@ -1,0 +1,29 @@
+{
+  "Nome": "Jogador1",
+  "Inventario": {
+    "Itens": [
+      {
+        "TipoInterno": "Arma",
+        "Dano": 0,
+        "Tipo": 1,
+        "SubtipoPequena": null,
+        "SubtipoGrande": 0,
+        "Empilhavel": false,
+        "Id": "9041f082-ff01-466b-b629-b5cc9a05ce77",
+        "Nome": "AK-47",
+        "Descricao": null
+      },
+      {
+        "TipoInterno": "Municao",
+        "Tipo": 0,
+        "Nome": "Muni\u00E7\u00E3o Pesada",
+        "Descricao": "Muni\u00E7\u00F5es para fuzis de assalto",
+        "Dano": 130,
+        "Quantidade": 98,
+        "Empilhavel": true,
+        "Id": "178967c9-ed40-42fc-bc07-256bdd0431e2"
+      }
+    ],
+    "EspacosOcupados": 6
+  }
+}
